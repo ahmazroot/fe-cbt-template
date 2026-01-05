@@ -1,0 +1,28 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Build outputs
+.next
+out
+build
+dist
+
+# Cache
+.cache
+
+# Logs
+*.log
+
+# Environment
+.env*
+
+# Git
+.git
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+.DS_Store
+*.pem
