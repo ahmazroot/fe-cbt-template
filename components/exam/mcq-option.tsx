@@ -14,7 +14,8 @@ export function MCQOption({ label, content, isSelected, className, ...props }: M
         'flex w-full items-center gap-3 p-3 border rounded-lg transition-all text-left group',
         isSelected
           ? 'border-primary-600 bg-primary-50 ring-1 ring-primary-600'
-          : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-primary-200'
+          : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-primary-200',
+        className
       )}
       {...props}
     >

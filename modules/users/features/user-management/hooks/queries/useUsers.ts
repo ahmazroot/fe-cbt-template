@@ -1,7 +1,7 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import { userService } from '@/modules/users/services/user.service';
+import { userService } from '@/modules/users/features/user-management/services/user.service';
 import type { PaginatedResponse, PaginationParams } from '@/types/api';
-import type { User } from '@/modules/users/user.types';
+import type { User } from '@/modules/users/features/user-management/types/user.types';
 import { userKeys } from '../user.keys';
 
 /**

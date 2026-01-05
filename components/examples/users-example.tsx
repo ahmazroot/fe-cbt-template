@@ -26,7 +26,7 @@ export function UsersExample() {
         role: 'student',
       });
       toast.success('User created successfully!');
-    } catch (error) {
+    } catch {
       toast.error('Failed to create user');
     }
   };
@@ -35,7 +35,7 @@ export function UsersExample() {
     try {
       await deleteUser.mutateAsync(id);
       toast.success('User deleted successfully!');
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete user');
     }
   };

@@ -43,6 +43,7 @@ fe-cbt/
 - Automatic redirect untuk 401 (unauthorized)
 
 ### 2. **Types Layer** (`types/api.ts` & `modules/*/features/*/*.types.ts`)
+
 - TypeScript interfaces untuk API responses (Global)
 - Domain types & DTOs (Co-located in Features, e.g., `modules/users/features/user-management/user.types.ts`)
 
@@ -68,6 +69,7 @@ fe-cbt/
 - Menggunakan `as const` untuk type-safety
 
 Contoh Struktur `user.keys.ts`:
+
 ```typescript
 export const userKeys = {
   all: ['users'] as const,

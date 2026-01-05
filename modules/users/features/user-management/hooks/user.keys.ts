@@ -4,9 +4,9 @@ import type { PaginationParams } from '@/types/api';
  * Query Keys for Users
  */
 export const userKeys = {
-    all: ['users'] as const,
-    lists: () => [...userKeys.all, 'list'] as const,
-    list: (params?: PaginationParams) => [...userKeys.lists(), params] as const,
-    details: () => [...userKeys.all, 'detail'] as const,
-    detail: (id: string) => [...userKeys.details(), id] as const,
+  all: ['users'] as const,
+  lists: () => [...userKeys.all, 'list'] as const,
+  list: (params?: PaginationParams) => [...userKeys.lists(), params] as const,
+  details: () => [...userKeys.all, 'detail'] as const,
+  detail: (id: string) => [...userKeys.details(), id] as const,
 };

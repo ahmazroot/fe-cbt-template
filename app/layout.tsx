@@ -100,7 +100,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body className={`${inter.variable} ${geistMono.variable} bg-background text-foreground antialiased`}>
+      <body
+        className={`${inter.variable} ${geistMono.variable} bg-background text-foreground antialiased`}
+      >
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>

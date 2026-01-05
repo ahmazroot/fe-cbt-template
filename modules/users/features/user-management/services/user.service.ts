@@ -1,6 +1,10 @@
 import apiClient from '@/lib/api-client';
 import type { ApiResponse, PaginatedResponse, PaginationParams } from '@/types/api';
-import type { User, CreateUserDto, UpdateUserDto } from '@/modules/users/user.types';
+import type {
+  User,
+  CreateUserDto,
+  UpdateUserDto,
+} from '@/modules/users/features/user-management/types/user.types';
 
 /**
  * User Service

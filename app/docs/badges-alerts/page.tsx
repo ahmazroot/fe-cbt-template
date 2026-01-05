@@ -29,27 +29,35 @@ export default function BadgesAlertsSection() {
           <div className="flex flex-wrap gap-4 justify-center items-center">
             <div className="flex flex-col items-center gap-2">
               <Badge>Default</Badge>
-              <Typography.Mono className="text-[10px]">variant="default"</Typography.Mono>
+              <Typography.Mono className="text-[10px]">
+                variant=&quot;default&rdquo;
+              </Typography.Mono>
             </div>
             <div className="flex flex-col items-center gap-2">
               <Badge variant="secondary">Secondary</Badge>
-              <Typography.Mono className="text-[10px]">variant="secondary"</Typography.Mono>
+              <Typography.Mono className="text-[10px]">
+                variant=&quot;secondary&quot;
+              </Typography.Mono>
             </div>
             <div className="flex flex-col items-center gap-2">
               <Badge variant="outline">Outline</Badge>
-              <Typography.Mono className="text-[10px]">variant="outline"</Typography.Mono>
+              <Typography.Mono className="text-[10px]">variant=&quot;outline&quot;</Typography.Mono>
             </div>
             <div className="flex flex-col items-center gap-2">
               <Badge variant="success">Success</Badge>
-              <Typography.Mono className="text-[10px]">variant="success"</Typography.Mono>
+              <Typography.Mono className="text-[10px]">variant=&quot;success&quot;</Typography.Mono>
             </div>
             <div className="flex flex-col items-center gap-2">
               <Badge variant="warning">Warning</Badge>
-              <Typography.Mono className="text-[10px]">variant="warning/pending"</Typography.Mono>
+              <Typography.Mono className="text-[10px]">
+                variant=&quot;warning/pending&quot;
+              </Typography.Mono>
             </div>
             <div className="flex flex-col items-center gap-2">
               <Badge variant="destructive">Destructive</Badge>
-              <Typography.Mono className="text-[10px]">variant="destructive"</Typography.Mono>
+              <Typography.Mono className="text-[10px]">
+                variant=&quot;destructive&quot;
+              </Typography.Mono>
             </div>
           </div>
 
@@ -91,7 +99,7 @@ export default function BadgesAlertsSection() {
                 </AlertDescription>
               </Alert>
               <Typography.Mono className="text-center text-[10px]">
-                variant="default"
+                variant=&quot;default&quot;
               </Typography.Mono>
             </div>
 
@@ -105,7 +113,7 @@ export default function BadgesAlertsSection() {
                 </AlertDescription>
               </Alert>
               <Typography.Mono className="text-center text-[10px]">
-                variant="success"
+                variant=&quot;success&ldquo;
               </Typography.Mono>
             </div>
 
@@ -119,7 +127,7 @@ export default function BadgesAlertsSection() {
                 </AlertDescription>
               </Alert>
               <Typography.Mono className="text-center text-[10px]">
-                variant="warning"
+                variant=&#34;warning&rdquo;
               </Typography.Mono>
             </div>
 
@@ -133,7 +141,7 @@ export default function BadgesAlertsSection() {
                 </AlertDescription>
               </Alert>
               <Typography.Mono className="text-center text-[10px]">
-                variant="destructive"
+                variant=&ldquo;destructive&quot;
               </Typography.Mono>
             </div>
           </div>

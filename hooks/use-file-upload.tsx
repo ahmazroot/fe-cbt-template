@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface UseFileUploadProps {
   onUpload?: (file: File | null) => void;
@@ -31,7 +31,7 @@ function useFileUpload({ onUpload, accept }: UseFileUploadProps = {}) {
         onUpload?.(selectedFile);
       }
     },
-    [onUpload],
+    [onUpload]
   );
 
   const handleRemove = useCallback(() => {
@@ -43,7 +43,7 @@ function useFileUpload({ onUpload, accept }: UseFileUploadProps = {}) {
     setFileName(null);
     previewRef.current = null;
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = '';
     }
     onUpload?.(null);
   }, [previewUrl, onUpload]);
@@ -68,6 +68,5 @@ function useFileUpload({ onUpload, accept }: UseFileUploadProps = {}) {
     handleRemove,
   };
 }
-
 
 export default useFileUpload;
