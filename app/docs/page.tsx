@@ -10,15 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { SwitchCard } from '@/components/ui/switch-card';
 import { StatsCard } from '@/components/ui/stats-card';
 import { StandardCard } from '@/components/ui/standard-card';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FileUpload } from '@/components/ui/file-upload';
 import { ExamDataTable, ColumnDef } from '@/components/exam/exam-table';
@@ -37,7 +29,6 @@ import { TabsContent } from '@/components/ui/tabs';
 import { ExamTabs } from '@/components/exam/exam-tabs';
 import { QuestionNav } from '@/components/exam/question-nav';
 import { Timer } from '@/components/exam/timer';
-import { MCQOption } from '@/components/exam/mcq-option';
 import { MCQOption } from '@/components/exam/mcq-option';
 import { Label } from '@/components/ui/label';
 import { InfoIcon, AlertCircleIcon, CheckCircle2Icon, TimerIcon, PackageIcon } from 'lucide-react';

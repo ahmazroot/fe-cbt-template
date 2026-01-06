@@ -9,28 +9,25 @@ fe-cbt/
 ├── types/
 │   └── api.ts                 # TypeScript API types
 ├── modules/
-│   ├── auth/
-│   │   └── features/
-│   │       ├── login/
-│   │       │   ├── components/
-│   │       │   ├── hooks/
-│   │       │   ├── services/
-│   │       │   └── stores/
-│   │       └── register/
-│   │           ├── components/
-│   │           ├── hooks/
-│   │           ├── services/
-│   │           └── stores/
-│   └── users/
-│       └── features/
-│           └── user-management/
-│               ├── user.types.ts      # Domain types
-│               ├── services/
-│               │   └── user.service.ts # API calls
-│               └── hooks/
-│                   ├── user.keys.ts    # Cache keys
-│                   ├── queries/        # Fetch hooks
-│                   └── mutations/      # Write hooks
+│   |── auth/
+│       ├── features/
+│       │   └── login/
+│       │       ├── stores/
+│       │       ├── types/
+│       │       │   └── login.types.ts
+│       │       ├── components/
+│       │       ├── hooks/
+│       │       │   ├── login.keys.ts
+│       │       │   ├── queries/
+│       │       │   └── mutations/
+│       │       │       └── use-login.ts
+│       │       └── services/
+│       │           └── login.service.ts
+│       ├── stores/
+│       │   └── auth.store.ts
+│       └── types/
+│           └── auth.types.ts
+
 ```
 
 ## 📚 Layers Explanation
@@ -45,7 +42,9 @@ fe-cbt/
 ### 2. **Types Layer** (`types/api.ts` & `modules/*/features/*/*.types.ts`)
 
 - TypeScript interfaces untuk API responses (Global)
-- Domain types & DTOs (Co-located in Features, e.g., `modules/users/features/user-management/user.types.ts`)
+- Domain types & DTOs:
+  - **Shared/Domain Entities**: `modules/<module>/types/*.types.ts` (e.g., `User`, `Product`)
+  - **Feature-Specific DTOs**: `modules/<module>/features/<feature>/types/*.types.ts` (e.g., `CreateUserDto`, `LoginDto`)
 
 ### 3. **Services Layer** (`modules/*/features/*/services/*.service.ts`)
 
@@ -184,14 +183,21 @@ export function DeleteUserButton({ userId }) {
 
 ### Step 1: Define Types
 
+**Shared Domain Types:**
+
 ```typescript
-// types/api.ts
+// modules/products/types/product.types.ts
 export interface Product {
   id: string;
   name: string;
   price: number;
 }
+```
 
+**Feature-Specific DTOs:**
+
+```typescript
+// modules/products/features/product-list/types/product-list.types.ts
 export interface CreateProductDto {
   name: string;
   price: number;
@@ -201,9 +207,10 @@ export interface CreateProductDto {
 ### Step 2: Create Service
 
 ```typescript
-// modules/products/services/product.service.ts
+// modules/products/features/product-list/services/product.service.ts
 import apiClient from '@/lib/api-client';
-import type { Product, CreateProductDto } from '@/types/api';
+import type { Product } from '@/modules/products/types/product.types';
+import type { CreateProductDto } from '../types/product-list.types';
 
 export const productService = {
   async getProducts() {
@@ -221,9 +228,9 @@ export const productService = {
 ### Step 3: Create Hooks
 
 ```typescript
-// modules/products/hooks/queries/useProducts.ts
+// modules/products/features/product-list/hooks/queries/useProducts.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { productService } from '@/modules/products/services/product.service';
+import { productService } from '@/modules/products/features/product-list/services/product.service';
 import { productKeys } from '../product.keys';
 
 export const productKeys = {
@@ -253,9 +260,9 @@ export function useCreateProduct() {
 ### Step 4: Use in Components
 
 ```typescript
-// components/products-list.tsx
-import { useProducts } from '@/modules/products/hooks/queries/useProducts';
-import { useCreateProduct } from '@/modules/products/hooks/mutations/useCreateProduct';
+// modules/products/features/product-list/components/products-list.tsx
+import { useProducts } from '@/modules/products/features/product-list/hooks/queries/useProducts';
+import { useCreateProduct } from '@/modules/products/features/product-list/hooks/mutations/useCreateProduct';
 
 export function ProductsList() {
   const { data, isLoading } = useProducts();
