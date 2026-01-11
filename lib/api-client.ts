@@ -1,5 +1,8 @@
-import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import { env } from '@/env';
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+} from 'axios';
 
 /**
  * Create axios instance with default configuration
@@ -29,7 +32,7 @@ apiClient.interceptors.request.use(
     }
 
     // Log request in development
-    if (env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       console.log('🚀 API Request:', {
         method: config.method?.toUpperCase(),
         url: config.url,
@@ -54,7 +57,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => {
     // Log response in development
-    if (env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       console.log('✅ API Response:', {
         status: response.status,
         url: response.config.url,
@@ -65,13 +68,11 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    // Handle different error cases
     if (error.response) {
       const { status, data } = error.response;
 
       switch (status) {
         case 401:
-          // Unauthorized - clear auth and redirect to login
           if (typeof window !== 'undefined') {
             localStorage.removeItem('auth_token');
             window.location.href = '/login';
@@ -94,10 +95,8 @@ apiClient.interceptors.response.use(
           console.error('❌ API Error:', data);
       }
     } else if (error.request) {
-      // Request made but no response received
       console.error('❌ Network Error:', error.message);
     } else {
-      // Error in request configuration
       console.error('❌ Request Configuration Error:', error.message);
     }
 

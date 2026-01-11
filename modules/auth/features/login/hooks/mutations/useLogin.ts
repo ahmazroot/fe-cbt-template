@@ -1,20 +1,18 @@
-import { useMutation, type UseMutationResult } from '@tanstack/react-query';
-import { loginService } from '@/modules/auth/features/login/services/login.service';
-import type { AuthResponse } from '@/modules/auth/types/auth.types';
-import type { LoginDto } from '@/modules/auth/features/login/types/login.types';
+import { useMutation } from '@tanstack/react-query';
+import { loginService } from '../../services/login.service';
 import { useAuthStore } from '@/modules/auth/stores/auth.store';
+import type { LoginDto } from '../../types/login.types';
+import type { AuthResponse } from '@/modules/auth/types/auth.types';
 
-/**
- * Login mutation
- */
-export function useLogin(): UseMutationResult<AuthResponse, Error, LoginDto> {
-  const login = useAuthStore((state) => state.login);
+export function useLogin() {
+  const login = useAuthStore((s) => s.login);
 
-  return useMutation({
+  return useMutation<AuthResponse, Error, LoginDto>({
+    mutationKey: ['login'],
     mutationFn: loginService.login,
     onSuccess: (data) => {
       login(data);
-      console.log('Login successful', data);
+      console.log('Login success', data);
     },
   });
 }

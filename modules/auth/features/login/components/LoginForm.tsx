@@ -1,11 +1,14 @@
+'use client';
+
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { LogoIcon } from '@/components/exam/logo-icon';
 
+import { LogoIcon } from '@/components/exam/logo-icon';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,6 +20,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
+import { loginService } from '../services/login.service';
+
 const loginSchema = z.object({
   email: z.string().email({ message: 'Email tidak valid' }),
   password: z.string().min(8, { message: 'Password minimal 8 karakter' }),
@@ -25,23 +30,50 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      router.replace('/autentikasi/home');
+    }
+  }, [router]);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues: { email: '', password: '' },
   });
 
-  function onSubmit(values: LoginFormValues) {
-    console.log(values);
+  async function onSubmit(values: LoginFormValues) {
+    try {
+      setLoading(true);
+      setError('');
+
+    const data = await loginService.login({
+      email: values.email,
+      password: values.password,
+    });
+
+
+      if (!data?.token) {
+        throw new Error('Token tidak ditemukan');
+      }
+
+      localStorage.setItem('token', data.token);
+      router.push('/autentikasi/home');
+    } catch (err: any) {
+      setError(err?.response?.data?.message || err.message || 'Login gagal');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[380px]">
-      {/* Mobile Logo (Only shows on mobile) */}
+      {/* Mobile Logo */}
       <div className="flex flex-col space-y-2 text-center">
         <div className="mb-4 flex justify-center lg:hidden">
           <LogoIcon />
@@ -51,6 +83,9 @@ export function LoginForm() {
           Masukkan kredensial Anda untuk mengakses dashboard.
         </p>
       </div>
+
+      {/* ❗ Error */}
+      {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
       {/* Form */}
       <div className="grid gap-6">
@@ -111,8 +146,8 @@ export function LoginForm() {
               )}
             />
 
-            <Button type="submit" size="lg" className="w-full mt-2">
-              Masuk ke Dashboard
+            <Button type="submit" size="lg" className="w-full mt-2" disabled={loading}>
+              {loading ? 'Loading...' : 'Masuk ke Dashboard'}
             </Button>
           </form>
         </Form>
@@ -154,7 +189,7 @@ export function LoginForm() {
       <p className="px-8 text-center text-sm text-slate-500">
         Belum punya akun Chairman?{' '}
         <Link
-          href="#"
+          href="register"
           className="underline underline-offset-4 hover:text-primary-600 text-slate-900 font-medium"
         >
           Daftar Institusi
