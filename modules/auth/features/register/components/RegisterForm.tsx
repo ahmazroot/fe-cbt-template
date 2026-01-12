@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -17,6 +17,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+
+// Import register service
+import { registerService } from '../services/register.service';
 
 const registerSchema = z
   .object({
@@ -54,31 +57,23 @@ export function RegisterForm() {
     formState: { isSubmitting },
   } = form;
 
-  async function onSubmit(values: RegisterFormValues) {
-    try {
-      setError('');
+  // 🔹 Gunakan registerService di sini
+ async function onSubmit(values: RegisterFormValues) {
+  try {
+    setError('');
 
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          Firstname: values.Firstname,
-          Lastname: values.Lastname,
-          Email: values.Email,
-          Password: values.Password,
-        }),
-      });
+    const data = await registerService.register({
+      Firstname: values.Firstname,
+      Lastname: values.Lastname,
+      Email: values.Email,
+      Password: values.Password,
+    });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || 'Register gagal');
-      }
-
-      router.push('/autentikasi/login');
-    } catch (err: any) {
-      setError(err.message);
-    }
+    router.push('/autentikasi/login');
+  } catch (err: any) {
+    setError(err?.response?.data?.message || err.message || 'Register gagal');
   }
+}
 
   return (
     <Form {...form}>

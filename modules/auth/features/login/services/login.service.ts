@@ -12,7 +12,7 @@ export const loginService = {
    * Through Next.js API Route (CORS-safe)
    */
   async login(payload: LoginDto): Promise<AuthResponse> {
-    const response = await apiClient.post('/api/auth/login', payload);
+    const response = await apiClient.post('/auth/login', payload);
 
     /**
      * Handle flexible backend response formats

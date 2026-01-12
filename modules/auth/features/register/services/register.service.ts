@@ -1,21 +1,20 @@
-import { REGISTER_API } from './register.api';
-import { RegisterPayload, RegisterResponse } from '../types/register.types';
+import apiClient from '@/lib/api-client';
+import type { RegisterPayload } from '../types/register.types';
+import type { RegisterResponse } from '../types/register.types';
 
-export async function registerService(
-  payload: RegisterPayload
-): Promise<RegisterResponse> {
-  const res = await fetch(REGISTER_API.REGISTER, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+export const registerService = {
+  async register(payload: RegisterPayload): Promise<RegisterResponse> {
+    const response = await apiClient.post('/auth/register-test', payload);
 
-  if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.message || 'Register gagal');
-  }
+    const data =
+      response.data?.data ??
+      response.data?.result ??
+      response.data;
 
-  return res.json();
-}
+    if (!data) {
+      throw new Error('Register gagal, response API kosong');
+    }
+
+    return data as RegisterResponse;
+  },
+};
