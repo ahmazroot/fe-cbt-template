@@ -1,29 +1,16 @@
-import axios, {
-  AxiosError,
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import { env } from '@/env'; // alias tsconfig.json: "@" -> root folder
 
-/**
- * Create axios instance with default configuration
- */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
+  baseURL: env.NEXT_PUBLIC_API_URL, // <- pakai env client
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-/**
- * Request Interceptor
- * - Add authorization token
- * - Add custom headers
- * - Log requests in development
- */
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // Add auth token if available
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('auth_token');
       if (token && config.headers) {
@@ -31,7 +18,6 @@ apiClient.interceptors.request.use(
       }
     }
 
-    // Log request in development
     if (process.env.NODE_ENV === 'development') {
       console.log('🚀 API Request:', {
         method: config.method?.toUpperCase(),
@@ -48,15 +34,8 @@ apiClient.interceptors.request.use(
   }
 );
 
-/**
- * Response Interceptor
- * - Handle success responses
- * - Handle errors globally
- * - Log responses in development
- */
 apiClient.interceptors.response.use(
   (response) => {
-    // Log response in development
     if (process.env.NODE_ENV === 'development') {
       console.log('✅ API Response:', {
         status: response.status,
@@ -64,13 +43,11 @@ apiClient.interceptors.response.use(
         data: response.data,
       });
     }
-
     return response;
   },
   (error: AxiosError) => {
     if (error.response) {
       const { status, data } = error.response;
-
       switch (status) {
         case 401:
           if (typeof window !== 'undefined') {
@@ -78,26 +55,22 @@ apiClient.interceptors.response.use(
             window.location.href = '/login';
           }
           break;
-
         case 403:
           console.error('❌ Forbidden:', data);
           break;
-
         case 404:
           console.error('❌ Not Found:', data);
           break;
-
         case 500:
           console.error('❌ Server Error:', data);
           break;
-
         default:
           console.error('❌ API Error:', data);
       }
     } else if (error.request) {
       console.error('❌ Network Error:', error.message);
     } else {
-      console.error('❌ Request Configuration Error:', error.message);
+      console.error('❌ Axios config error:', error.message);
     }
 
     return Promise.reject(error);
