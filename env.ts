@@ -19,8 +19,10 @@ export const env = createEnv({
    * These must be prefixed with NEXT_PUBLIC_ and are exposed to the browser
    */
   client: {
+    NEXT_PUBLIC_NODE_ENV: z.enum(['development', 'production']).default('development'),
     NEXT_PUBLIC_APP_NAME: z.string().default('FE-CBT'),
     NEXT_PUBLIC_APP_URL: z.string().url().default('http://localhost:3000'),
+    NEXT_PUBLIC_API_URL: z.string().url().default('http://localhost:3000'),
     // Add your client-side environment variables here
     // Example:
     // NEXT_PUBLIC_API_URL: z.string().url(),
@@ -32,8 +34,10 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_NODE_ENV: process.env.NEXT_PUBLIC_NODE_ENV,
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     // Add your runtime environment variables here
     // Make sure to add them to both the schema above and here
   },
