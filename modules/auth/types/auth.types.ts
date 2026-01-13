@@ -14,6 +14,7 @@ export interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  hasHydrated: boolean;
 }
 
 export interface AuthActions {
@@ -21,4 +22,5 @@ export interface AuthActions {
   logout: () => void;
   setToken: (token: string | null) => void;
   setLoading: (isLoading: boolean) => void;
+  setHasHydrated: () => void;
 }

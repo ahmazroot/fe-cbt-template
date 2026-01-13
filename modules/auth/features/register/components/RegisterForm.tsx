@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-// Import register service
 import { registerService } from '../services/register.service';
 
 const registerSchema = z
@@ -57,23 +56,28 @@ export function RegisterForm() {
     formState: { isSubmitting },
   } = form;
 
-  // 🔹 Gunakan registerService di sini
- async function onSubmit(values: RegisterFormValues) {
-  try {
-    setError('');
+  async function onSubmit(values: RegisterFormValues) {
+    try {
+      setError('');
 
-    const data = await registerService.register({
-      Firstname: values.Firstname,
-      Lastname: values.Lastname,
-      Email: values.Email,
-      Password: values.Password,
-    });
+      const data = await registerService.register({
+        Firstname: values.Firstname,
+        Lastname: values.Lastname,
+        Email: values.Email,
+        Password: values.Password,
+      });
 
-    router.push('/autentikasi/login');
-  } catch (err: any) {
-    setError(err?.response?.data?.message || err.message || 'Register gagal');
+      void data;
+
+      router.push('/autentikasi/login');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Register gagal');
+      }
+    }
   }
-}
 
   return (
     <Form {...form}>
@@ -182,14 +186,8 @@ export function RegisterForm() {
         />
 
         {/* Button Register (Loading tanpa ubah UI) */}
-        <Button
-          type="submit"
-          className="w-full mt-2"
-          disabled={isSubmitting}
-        >
-          {isSubmitting && (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />
-          )}
+        <Button type="submit" className="w-full mt-2" disabled={isSubmitting}>
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />}
           Register
         </Button>
       </form>

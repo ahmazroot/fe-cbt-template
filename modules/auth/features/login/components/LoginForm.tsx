@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/form';
 
 import { loginService } from '../services/login.service';
+import { useAuthStore } from '@/modules/auth/stores/auth.store';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Email tidak valid' }),
@@ -31,43 +32,45 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState('');
+  const login = useAuthStore((state) => state.login);
 
-  React.useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      router.replace('/autentikasi/home');
-    }
-  }, [router]);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [error, setError] = React.useState('');
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   });
 
+  const {
+    formState: { isSubmitting },
+  } = form;
+
   async function onSubmit(values: LoginFormValues) {
     try {
-      setLoading(true);
       setError('');
 
-    const data = await loginService.login({
-      email: values.email,
-      password: values.password,
-    });
-
+      const data = await loginService.login({
+        email: values.email,
+        password: values.password,
+      });
 
       if (!data?.token) {
         throw new Error('Token tidak ditemukan');
       }
 
-      localStorage.setItem('token', data.token);
-      router.push('/autentikasi/home');
-    } catch (err: any) {
-      setError(err?.response?.data?.message || err.message || 'Login gagal');
-    } finally {
-      setLoading(false);
+      login({
+        token: data.token,
+        user: data.user ?? null,
+      });
+
+      router.replace('/autentikasi/home');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Login Gagal');
+      }
     }
   }
 
@@ -146,8 +149,8 @@ export function LoginForm() {
               )}
             />
 
-            <Button type="submit" size="lg" className="w-full mt-2" disabled={loading}>
-              {loading ? 'Loading...' : 'Masuk ke Dashboard'}
+            <Button type="submit" size="lg" className="w-full mt-2" disabled={isSubmitting}>
+              {isSubmitting ? 'Loading...' : 'Masuk ke Dashboard'}
             </Button>
           </form>
         </Form>

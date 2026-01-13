@@ -2,21 +2,26 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/modules/auth/stores/auth.store';
 
 export function HomeView() {
   const router = useRouter();
 
+  const token = useAuthStore((state) => state.token);
+  const logout = useAuthStore((state) => state.logout);
+
   React.useEffect(() => {
-    const token = localStorage.getItem('token');
     if (!token) {
-      router.push('/autentikasi/login');
+      router.replace('/autentikasi/login');
     }
-  }, [router]);
+  }, [token, router]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    router.push('/autentikasi/login');
+    logout();
+    router.replace('/autentikasi/login');
   };
+
+  if (!token) return null;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8">
