@@ -157,7 +157,7 @@ export function LoginForm() {
       <p className="px-8 text-center text-sm text-slate-500">
         Belum punya akun Chairman?{' '}
         <Link
-          href="#"
+          href="/autentikasi/register"
           className="underline underline-offset-4 hover:text-primary-600 text-slate-900 font-medium"
         >
           Daftar Institusi
