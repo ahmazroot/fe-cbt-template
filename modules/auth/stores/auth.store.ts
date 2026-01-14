@@ -9,6 +9,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       token: null,
       isAuthenticated: false,
       isLoading: false,
+      hasHydrated: false,
 
       login: ({ user, token }) =>
         set({
@@ -25,8 +26,8 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         }),
 
       setToken: (token) => set({ token }),
-
       setLoading: (isLoading) => set({ isLoading }),
+      setHydrated: () => set({ hasHydrated: true }),
     }),
     {
       name: 'auth-storage',
@@ -35,6 +36,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHydrated(); // ⬅️ KUNCI
+      },
     }
   )
 );
