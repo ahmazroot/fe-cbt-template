@@ -6,10 +6,7 @@ import { env } from '@/env';
  */
 const apiClient: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  // timeout: 30000,
 });
 
 /**
@@ -29,7 +26,7 @@ apiClient.interceptors.request.use(
     }
 
     // Log request in development
-    if (env.NODE_ENV === 'development') {
+    if (env.NEXT_PUBLIC_NODE_ENV === 'development') {
       console.log('🚀 API Request:', {
         method: config.method?.toUpperCase(),
         url: config.url,
@@ -54,7 +51,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => {
     // Log response in development
-    if (env.NODE_ENV === 'development') {
+    if (env.NEXT_PUBLIC_NODE_ENV === 'development') {
       console.log('✅ API Response:', {
         status: response.status,
         url: response.config.url,
@@ -71,12 +68,14 @@ apiClient.interceptors.response.use(
 
       switch (status) {
         case 401:
-          // Unauthorized - clear auth and redirect to login
-          if (typeof window !== 'undefined') {
-            localStorage.removeItem('auth_token');
-            window.location.href = '/login';
-          }
-          break;
+        // Unauthorized - clear auth and redirect to login
+        // customized according to individual requirements
+
+        // if (typeof window !== 'undefined') {
+        //   localStorage.removeItem('auth_token');
+        //   window.location.href = '/login';
+        // }
+        // break;
 
         case 403:
           console.error('❌ Forbidden:', data);
