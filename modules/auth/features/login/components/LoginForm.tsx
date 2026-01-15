@@ -20,8 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { loginService } from '../services/login.service';
-import { useAuthStore } from '@/modules/auth/stores/auth.store';
+import { useLogin } from '../hooks/mutations/useLogin';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Email tidak valid' }),
@@ -32,7 +31,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
-  const login = useAuthStore((state) => state.login);
+  const { mutateAsync: loginMutate, isPending } = useLogin();
 
   const [showPassword, setShowPassword] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -50,18 +49,9 @@ export function LoginForm() {
     try {
       setError('');
 
-      const data = await loginService.login({
+      await loginMutate({
         email: values.email,
         password: values.password,
-      });
-
-      if (!data?.token) {
-        throw new Error('Token tidak ditemukan');
-      }
-
-      login({
-        token: data.token,
-        user: data.user ?? null,
       });
 
       router.replace('/autentikasi/home');

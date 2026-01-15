@@ -8,10 +8,18 @@ export function useLogin() {
   const login = useAuthStore((s) => s.login);
 
   return useMutation<AuthResponse, Error, LoginDto>({
-    mutationKey: ['login'],
     mutationFn: loginService.login,
+
     onSuccess: (data) => {
-      login(data);
+      if (!data?.token) {
+        throw new Error('Token tidak ditemukan');
+      }
+
+      login({
+        token: data.token,
+        user: data.user ?? null,
+      });
+
       console.log('Login success', data);
     },
   });

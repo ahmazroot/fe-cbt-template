@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,7 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { registerService } from '../services/register.service';
+import { useRegister } from '../hooks/mutations/useRegister';
 
 const registerSchema = z
   .object({
@@ -36,10 +35,10 @@ const registerSchema = z
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirm, setShowConfirm] = React.useState(false);
-  const [error, setError] = React.useState('');
+
+  const { mutateAsync: register, isPending, error } = useRegister();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -52,37 +51,23 @@ export function RegisterForm() {
     },
   });
 
-  const {
-    formState: { isSubmitting },
-  } = form;
-
   async function onSubmit(values: RegisterFormValues) {
-    try {
-      setError('');
-
-      const data = await registerService.register({
-        Firstname: values.Firstname,
-        Lastname: values.Lastname,
-        Email: values.Email,
-        Password: values.Password,
-      });
-
-      void data;
-
-      router.push('/autentikasi/login');
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Register gagal');
-      }
-    }
+    await register({
+      Firstname: values.Firstname,
+      Lastname: values.Lastname,
+      Email: values.Email,
+      Password: values.Password,
+    });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-sm">
+            {error instanceof Error ? error.message : 'Register gagal'}
+          </p>
+        )}
 
         {/* Firstname */}
         <FormField
@@ -186,8 +171,8 @@ export function RegisterForm() {
         />
 
         {/* Button Register (Loading tanpa ubah UI) */}
-        <Button type="submit" className="w-full mt-2" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />}
+        <Button type="submit" className="w-full mt-2" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin inline" />}
           Register
         </Button>
       </form>
