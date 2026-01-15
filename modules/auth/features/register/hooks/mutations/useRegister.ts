@@ -1,0 +1,11 @@
+import { useMutation } from '@tanstack/react-query';
+import { registerService } from '@/modules/auth/features/register/services/register.service';
+import { REGISTER_KEYS } from '@/modules/auth/features/register/hooks/Register.keys';
+import type { RegisterPayload, RegisterResponse } from '../../types/register.types';
+
+export function useRegister() {
+  return useMutation<RegisterResponse, Error, RegisterPayload>({
+    mutationKey: REGISTER_KEYS.register,
+    mutationFn: (payload) => registerService.register(payload),
+  });
+}
